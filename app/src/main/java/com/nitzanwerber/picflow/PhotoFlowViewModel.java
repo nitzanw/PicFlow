@@ -2,7 +2,8 @@ package com.nitzanwerber.picflow;
 
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.ViewModel;
-import com.nitzanwerber.picflow.pojo.FlickrPhotosSearchResponse;
+import com.nitzanwerber.picflow.dataModel.pojo.FlickrPhotosSearchResponse;
+import com.nitzanwerber.picflow.dataModel.PhotoRepository;
 
 import javax.inject.Inject;
 import java.util.List;

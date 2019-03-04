@@ -1,6 +1,9 @@
-package com.nitzanwerber.picflow;
+package com.nitzanwerber.picflow.Module;
 
 import androidx.lifecycle.ViewModel;
+import com.nitzanwerber.picflow.PhotoFlowViewModel;
+import com.nitzanwerber.picflow.ViewModelFactory;
+import com.nitzanwerber.picflow.dataModel.PhotoRepository;
 import dagger.MapKey;
 import dagger.Module;
 import dagger.Provides;
@@ -26,14 +29,14 @@ public class ViewModelModule {
 
     @JvmSuppressWildcards
     @Provides
-    ViewModelFactory viewModelFactory(Map<Class<? extends ViewModel>, Provider<ViewModel>> providerMap) {
+    public ViewModelFactory viewModelFactory(Map<Class<? extends ViewModel>, Provider<ViewModel>> providerMap) {
         return new ViewModelFactory(providerMap);
     }
 
     @Provides
     @IntoMap
     @ViewModelKey(PhotoFlowViewModel.class)
-    ViewModel viewModel1(PhotoRepository photoRepository) {
+    public ViewModel viewModel1(PhotoRepository photoRepository) {
         return new PhotoFlowViewModel(photoRepository);
     }
 }

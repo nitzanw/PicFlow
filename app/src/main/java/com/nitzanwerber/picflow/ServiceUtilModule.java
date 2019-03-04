@@ -6,6 +6,8 @@ import android.preference.PreferenceManager;
 import com.google.gson.FieldNamingPolicy;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import com.nitzanwerber.picflow.Module.NetworkModule;
+import com.squareup.picasso.OkHttp3Downloader;
 import dagger.Module;
 import dagger.Provides;
 import okhttp3.Cache;
@@ -16,12 +18,12 @@ import retrofit2.converter.gson.GsonConverterFactory;
 
 import javax.inject.Singleton;
 
-@Module
-public class NetModule {
+@Module(includes = NetworkModule.class)
+public class ServiceUtilModule {
 
     String mBaseUrl;
 
-    public NetModule(String httpsApi) {
+    public ServiceUtilModule(String httpsApi) {
         mBaseUrl = httpsApi;
     }
 
@@ -35,14 +37,6 @@ public class NetModule {
 
     @Provides
     @Singleton
-    Cache provideOkHttpCache(Application application) {
-        int cacheSize = 10 * 1024 * 1024; // 10 MiB
-        Cache cache = new Cache(application.getCacheDir(), cacheSize);
-        return cache;
-    }
-
-    @Provides
-    @Singleton
     Gson provideGson() {
         GsonBuilder gsonBuilder = new GsonBuilder();
         gsonBuilder.setLenient();
@@ -50,15 +44,6 @@ public class NetModule {
         return gsonBuilder.create();
     }
 
-    @Provides
-    @Singleton
-    OkHttpClient provideOkHttpClient(Cache cache) {
-        HttpLoggingInterceptor logging = new HttpLoggingInterceptor();
-        logging.setLevel(HttpLoggingInterceptor.Level.BASIC);
-        OkHttpClient.Builder client = new OkHttpClient.Builder().addInterceptor(logging);
-        client.cache(cache);
-        return client.build();
-    }
 
     @Provides
     @Singleton
@@ -70,6 +55,12 @@ public class NetModule {
                 .build();
         return retrofit;
     }
+
+//    @Provides
+//    @Singleton
+//    OkHttp3Downloader provideOkHttp3Downloader(OkHttpClient okHttpClient) {
+//        return new OkHttp3Downloader(okHttpClient);
+//    }
 
     @Provides
     @Singleton

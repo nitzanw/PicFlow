@@ -1,6 +1,8 @@
 package com.nitzanwerber.picflow;
 
 import android.app.Application;
+import com.nitzanwerber.picflow.Module.PicassoModule;
+import com.nitzanwerber.picflow.Module.ViewModelModule;
 
 public class MyApp extends Application {
     private AppComponent mAppComponent;
@@ -13,7 +15,9 @@ public class MyApp extends Application {
         mAppComponent = DaggerAppComponent.builder()
                 // list of modules that are part of this component need to be created here too
                 .appModule(new AppModule(this)) // This also corresponds to the name of your module: %component_name%Module
-                .netModule(new NetModule(FlickerAPIInterface.HTTPS_API))
+                .serviceUtilModule(new ServiceUtilModule(FlickerAPIInterface.HTTPS_API))
+                .picassoModule(new PicassoModule())
+                .viewModelModule(new ViewModelModule())
                 .build();
 
         // If a Dagger 2 component does not have any constructor arguments for any of its modules,

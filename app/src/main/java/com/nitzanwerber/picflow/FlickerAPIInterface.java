@@ -1,7 +1,6 @@
 package com.nitzanwerber.picflow;
 
-import com.nitzanwerber.picflow.pojo.FlickerPhotos;
-import com.nitzanwerber.picflow.pojo.FlickrPhotosSearchResponse;
+import com.nitzanwerber.picflow.dataModel.pojo.FlickrPhotosSearchResponse;
 import dagger.Module;
 import retrofit2.Call;
 import retrofit2.http.GET;
@@ -22,5 +21,6 @@ public interface FlickerAPIInterface {
     Call<FlickrPhotosSearchResponse> getPhotos(@Query("api_key") String api_key, @Query("method") String method,
                                                @Query("lat") String lat, @Query("lon") String lon,
                                                @Query("text") String text, @Query("nojsoncallback") int textnojsoncallback,
-                                               @Query("per_page") String perPage, @Query("format") String format);
+                                               @Query("per_page") String perPage, @Query("format") String format,
+                                               @Query("extras") String extras);
 }

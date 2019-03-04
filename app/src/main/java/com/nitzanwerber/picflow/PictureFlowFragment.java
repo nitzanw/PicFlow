@@ -13,9 +13,9 @@ import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-import com.nitzanwerber.picflow.pojo.FlickerPhotos;
-import com.nitzanwerber.picflow.pojo.FlickerPrePhoto;
-import com.nitzanwerber.picflow.pojo.FlickrPhotosSearchResponse;
+import com.nitzanwerber.picflow.dataModel.pojo.FlickerPrePhoto;
+import com.nitzanwerber.picflow.dataModel.pojo.FlickrPhotosSearchResponse;
+import com.squareup.picasso.Picasso;
 
 import javax.inject.Inject;
 import java.util.ArrayList;
@@ -25,8 +25,9 @@ public class PictureFlowFragment extends Fragment {
 
     private PhotoFlowViewModel viewModel;
     private RecyclerView.LayoutManager viewManager;
-    private PictureAdapter viewAdapter;
+    private PhotoAdapter viewAdapter;
     @Inject ViewModelFactory viewModelFactory;
+    @Inject Picasso picasso;
 
     @Override
     public void onAttach(Context context) {
@@ -46,15 +47,15 @@ public class PictureFlowFragment extends Fragment {
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        viewModel = ViewModelProviders.of(getActivity(),viewModelFactory).get(PhotoFlowViewModel.class);
+        viewModel = ViewModelProviders.of(this,viewModelFactory).get(PhotoFlowViewModel.class);
         viewModel.init("", "");
         subscribeUi(viewAdapter);
 
 
     }
 
-    private void subscribeUi(final PictureAdapter viewAdapter) {
-        viewModel.getPhotoResponse().observe(getActivity(), new Observer<FlickrPhotosSearchResponse>() {
+    private void subscribeUi(final PhotoAdapter viewAdapter) {
+        viewModel.getPhotoResponse().observe(this, new Observer<FlickrPhotosSearchResponse>() {
             @Override
             public void onChanged(FlickrPhotosSearchResponse array) {
                 if (array != null) {
@@ -71,7 +72,7 @@ public class PictureFlowFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
 
         viewManager = new LinearLayoutManager(view.getContext());
-        viewAdapter = new PictureAdapter(new ArrayList<FlickerPrePhoto>());
+        viewAdapter = new PhotoAdapter(new ArrayList<FlickerPrePhoto>(),picasso);
         RecyclerView recycleListView = view.findViewById(R.id.location_list_view);
         recycleListView.setHasFixedSize(true);
         recycleListView.setLayoutManager(viewManager);

@@ -1,4 +1,4 @@
-package com.nitzanwerber.picflow.pojo
+package com.nitzanwerber.picflow.dataModel.pojo
 
 
 data class FlickrPhotosSearchResponse(

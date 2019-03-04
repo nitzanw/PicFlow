@@ -1,10 +1,10 @@
-package com.nitzanwerber.picflow;
+package com.nitzanwerber.picflow.dataModel;
 
 import android.util.Log;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
-import com.nitzanwerber.picflow.pojo.FlickerPhotos;
-import com.nitzanwerber.picflow.pojo.FlickrPhotosSearchResponse;
+import com.nitzanwerber.picflow.FlickerAPIInterface;
+import com.nitzanwerber.picflow.dataModel.pojo.FlickrPhotosSearchResponse;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -16,17 +16,18 @@ import javax.inject.Singleton;
 public class PhotoRepository {
 
     public static final String MYAPP = "PicFlow";
-    public FlickerAPIInterface flickerAPIInterface;
+    public FlickerAPIInterface flickerService;
 
     @Inject
-    public PhotoRepository(FlickerAPIInterface flickerAPIInterface) {
-        this.flickerAPIInterface = flickerAPIInterface;
+    public PhotoRepository(FlickerAPIInterface flickerService) {
+        this.flickerService = flickerService;
     }
 
     public LiveData<FlickrPhotosSearchResponse> getPhotoPerLocation(String lan, String lon) {
         final MutableLiveData<FlickrPhotosSearchResponse> data = new MutableLiveData<>();
 
-        flickerAPIInterface.getPhotos(flickerAPIInterface.API_KEY, flickerAPIInterface.METHOD_FLICKR_SEARCH,"32.085300", "34.781769", "love", 1,"1", "json").enqueue(new Callback<FlickrPhotosSearchResponse>() {
+        flickerService.getPhotos(FlickerAPIInterface.API_KEY, FlickerAPIInterface.METHOD_FLICKR_SEARCH,"32.085300", "34.781769",
+                "love", 1,"1", "json", "url_o").enqueue(new Callback<FlickrPhotosSearchResponse>() {
             @Override
             public void onResponse(Call<FlickrPhotosSearchResponse> call, Response<FlickrPhotosSearchResponse> response) {
                 if(response.isSuccessful()){
