@@ -1,3 +1,6 @@
 <resources>
     <string name="app_name">PicFlow</string>
+    <string name="launch_activity">open the app!</string>
+    <string name="remove_location_updates">stop getting my location</string>
+    <string name="location_updated">Location Updated: %1$s</string>
 </resources>

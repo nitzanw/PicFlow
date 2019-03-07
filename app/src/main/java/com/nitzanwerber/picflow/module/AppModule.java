@@ -1,7 +1,8 @@
-package com.nitzanwerber.picflow;
+package com.nitzanwerber.picflow.module;
 
 import android.app.Application;
 import android.content.Context;
+import android.content.SharedPreferences;
 import dagger.Module;
 import dagger.Provides;
 
@@ -29,4 +30,5 @@ public class AppModule {
     Context providesContext() {
         return context;
     }
+
 }

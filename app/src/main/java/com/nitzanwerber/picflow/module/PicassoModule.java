@@ -1,4 +1,4 @@
-package com.nitzanwerber.picflow.Module;
+package com.nitzanwerber.picflow.module;
 
 
 import android.content.Context;

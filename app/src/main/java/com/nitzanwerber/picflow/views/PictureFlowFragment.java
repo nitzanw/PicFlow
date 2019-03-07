@@ -1,4 +1,4 @@
-package com.nitzanwerber.picflow;
+package com.nitzanwerber.picflow.views;
 
 import android.content.Context;
 import android.os.Bundle;
@@ -13,8 +13,11 @@ import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import com.nitzanwerber.picflow.*;
 import com.nitzanwerber.picflow.dataModel.pojo.FlickerPrePhoto;
 import com.nitzanwerber.picflow.dataModel.pojo.FlickrPhotosSearchResponse;
+import com.nitzanwerber.picflow.viewModel.PhotoFlowViewModel;
+import com.nitzanwerber.picflow.viewModel.ViewModelFactory;
 import com.squareup.picasso.Picasso;
 
 import javax.inject.Inject;
@@ -26,14 +29,13 @@ public class PictureFlowFragment extends Fragment {
     private PhotoFlowViewModel viewModel;
     private RecyclerView.LayoutManager viewManager;
     private PhotoAdapter viewAdapter;
-    @Inject ViewModelFactory viewModelFactory;
-    @Inject Picasso picasso;
+    @Inject public ViewModelFactory viewModelFactory;
+    @Inject public Picasso picasso;
 
     @Override
     public void onAttach(Context context) {
         ((MyApp)context.getApplicationContext()).getAppComponent().inject(this);
         super.onAttach(context);
-//        Log.d("myapp", Log.getStackTraceString(new Exception()));
 
     }
 
@@ -47,6 +49,7 @@ public class PictureFlowFragment extends Fragment {
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
+        // create this viewModel in such a way that other frags can access it
         viewModel = ViewModelProviders.of(this,viewModelFactory).get(PhotoFlowViewModel.class);
         viewModel.init("", "");
         subscribeUi(viewAdapter);

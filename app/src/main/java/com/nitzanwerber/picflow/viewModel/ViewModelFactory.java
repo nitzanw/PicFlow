@@ -1,4 +1,4 @@
-package com.nitzanwerber.picflow;
+package com.nitzanwerber.picflow.viewModel;
 
 import androidx.annotation.NonNull;
 import androidx.lifecycle.ViewModel;

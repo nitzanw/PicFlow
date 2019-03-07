@@ -1,8 +1,10 @@
 package com.nitzanwerber.picflow;
 
 import android.app.Application;
-import com.nitzanwerber.picflow.Module.PicassoModule;
-import com.nitzanwerber.picflow.Module.ViewModelModule;
+import com.nitzanwerber.picflow.module.AppModule;
+import com.nitzanwerber.picflow.module.PicassoModule;
+import com.nitzanwerber.picflow.module.ServiceUtilModule;
+import com.nitzanwerber.picflow.module.ViewModelModule;
 
 public class MyApp extends Application {
     private AppComponent mAppComponent;

@@ -1,4 +1,4 @@
-package com.nitzanwerber.picflow;
+package com.nitzanwerber.picflow.viewModel;
 
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.ViewModel;
@@ -6,11 +6,9 @@ import com.nitzanwerber.picflow.dataModel.pojo.FlickrPhotosSearchResponse;
 import com.nitzanwerber.picflow.dataModel.PhotoRepository;
 
 import javax.inject.Inject;
-import java.util.List;
 
 public class PhotoFlowViewModel extends ViewModel {
 
-    private LiveData<List<String>> locationArray;
     private LiveData<FlickrPhotosSearchResponse> photoResponse;
     private PhotoRepository pictureRepo;
 

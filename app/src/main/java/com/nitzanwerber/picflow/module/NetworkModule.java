@@ -1,8 +1,6 @@
-package com.nitzanwerber.picflow.Module;
+package com.nitzanwerber.picflow.module;
 
-import android.app.Application;
 import android.content.Context;
-import com.nitzanwerber.picflow.AppModule;
 import dagger.Module;
 import dagger.Provides;
 import okhttp3.Cache;

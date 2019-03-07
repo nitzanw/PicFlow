@@ -1,15 +1,14 @@
-package com.nitzanwerber.picflow
+package com.nitzanwerber.picflow.views
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import android.widget.ImageView
-import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
+import com.nitzanwerber.picflow.R
 import com.nitzanwerber.picflow.dataModel.pojo.FlickerPrePhoto
 import com.nitzanwerber.picflow.dataModel.pojo.FlickrPhotosSearchResponse
 import com.squareup.picasso.Picasso
 import java.util.ArrayList
-import javax.inject.Inject
 
 class PhotoAdapter(
     private val myDataset: ArrayList<FlickerPrePhoto>

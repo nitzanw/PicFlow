@@ -1,4 +1,4 @@
-package com.nitzanwerber.picflow;
+package com.nitzanwerber.picflow.module;
 
 import android.app.Application;
 import android.content.SharedPreferences;
@@ -6,13 +6,11 @@ import android.preference.PreferenceManager;
 import com.google.gson.FieldNamingPolicy;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
-import com.nitzanwerber.picflow.Module.NetworkModule;
-import com.squareup.picasso.OkHttp3Downloader;
+import com.nitzanwerber.picflow.FlickerAPIInterface;
+import com.nitzanwerber.picflow.module.NetworkModule;
 import dagger.Module;
 import dagger.Provides;
-import okhttp3.Cache;
 import okhttp3.OkHttpClient;
-import okhttp3.logging.HttpLoggingInterceptor;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 

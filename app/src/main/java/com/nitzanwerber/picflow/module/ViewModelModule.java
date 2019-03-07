@@ -1,8 +1,8 @@
-package com.nitzanwerber.picflow.Module;
+package com.nitzanwerber.picflow.module;
 
 import androidx.lifecycle.ViewModel;
-import com.nitzanwerber.picflow.PhotoFlowViewModel;
-import com.nitzanwerber.picflow.ViewModelFactory;
+import com.nitzanwerber.picflow.viewModel.PhotoFlowViewModel;
+import com.nitzanwerber.picflow.viewModel.ViewModelFactory;
 import com.nitzanwerber.picflow.dataModel.PhotoRepository;
 import dagger.MapKey;
 import dagger.Module;
