@@ -1,69 +1,24 @@
 package com.nitzanwerber.picflow.views;
 
-/**
- * Copyright 2017 Google Inc. All Rights Reserved.
- * <p>
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- * <p>
- * http://www.apache.org/licenses/LICENSE-2.0
- * <p>
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
-
-import android.app.ActivityManager;
-import android.app.Notification;
-import android.app.NotificationChannel;
-import android.app.NotificationManager;
-import android.app.PendingIntent;
-import android.app.Service;
+import android.app.*;
 import android.content.Context;
 import android.content.Intent;
 import android.content.res.Configuration;
 import android.location.Location;
-import android.os.Binder;
-import android.os.Build;
-import android.os.Handler;
-import android.os.HandlerThread;
-import android.os.IBinder;
-import android.os.Looper;
+import android.os.*;
+import android.util.Log;
 import androidx.annotation.NonNull;
 import androidx.core.app.NotificationCompat;
 import androidx.core.content.ContextCompat;
-import androidx.lifecycle.LifecycleService;
 import androidx.localbroadcastmanager.content.LocalBroadcastManager;
-import android.util.Log;
-
-import com.google.android.gms.location.FusedLocationProviderClient;
-import com.google.android.gms.location.LocationCallback;
-import com.google.android.gms.location.LocationRequest;
-import com.google.android.gms.location.LocationResult;
-import com.google.android.gms.location.LocationServices;
+import com.google.android.gms.location.*;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
+import com.nitzanwerber.picflow.utils.Utils;
 import com.nitzanwerber.picflow.R;
-import com.nitzanwerber.picflow.viewModel.LocationTrackingViewModel;
 
-/**
- * A bound and started service that is promoted to a foreground service when location updates have
- * been requested and all clients unbind.
- * <p>
- * For apps running in the background on "O" devices, location is computed only once every 10
- * minutes and delivered batched every 30 minutes. This restriction applies even to apps
- * targeting "N" or lower which are run on "O" devices.
- * <p>
- * This sample show how to use a long-running service for location updates. When an activity is
- * bound to this service, frequent location updates are permitted. When the activity is removed
- * from the foreground, the service promotes itself to a foreground service, and location updates
- * continue. When the activity comes back to the foreground, the foreground service stops, and the
- * notification assocaited with that service is removed.
- */
-public class LocationUpdatesService extends LifecycleService {
+
+public class LocationUpdatesService extends Service {
 
     private static final String PACKAGE_NAME =
             "com.google.android.gms.location.sample.locationupdatesforegroundservice";
@@ -131,16 +86,11 @@ public class LocationUpdatesService extends LifecycleService {
      */
     private Location mLocation;
 
-    private LocationTrackingViewModel viewModel;
-
     public LocationUpdatesService() {
     }
 
     @Override
     public void onCreate() {
-        super.onCreate();
-        viewModel = new LocationTrackingViewModel();
-        Log.d("the loc service:", viewModel.getLocationRepository().Foo());
         mFusedLocationClient = LocationServices.getFusedLocationProviderClient(this);
 
         mLocationCallback = new LocationCallback() {
@@ -173,7 +123,6 @@ public class LocationUpdatesService extends LifecycleService {
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
-        super.onStartCommand(intent, flags, startId);
         Log.i(TAG, "Service started");
         boolean startedFromNotification = intent.getBooleanExtra(EXTRA_STARTED_FROM_NOTIFICATION,
                 false);
@@ -195,7 +144,6 @@ public class LocationUpdatesService extends LifecycleService {
 
     @Override
     public IBinder onBind(Intent intent) {
-        super.onBind(intent);
         // Called when a client (MainActivity in case of this sample) comes to the foreground
         // and binds with this service. The service should cease to be a foreground service
         // when that happens.
@@ -223,13 +171,16 @@ public class LocationUpdatesService extends LifecycleService {
         // Called when the last client (MainActivity in case of this sample) unbinds from this
         // service. If this method is called due to a configuration change in MainActivity, we
         // do nothing. Otherwise, we make this service a foreground service.
-        if (!mChangingConfiguration && viewModel.requestingLocationUpdates()) {
+        if (!mChangingConfiguration && Utils.requestingLocationUpdates(this)) {
             Log.i(TAG, "Starting foreground service");
 
             if (Build.VERSION.SDK_INT == Build.VERSION_CODES.O) {
                 ContextCompat.startForegroundService(this, new Intent(this,
                         LocationUpdatesService.class));
+            } else {
+                startForeground(NOTIFICATION_ID, getNotification());
             }
+
             startForeground(NOTIFICATION_ID, getNotification());
         }
         return true; // Ensures onRebind() is called when a client re-binds.
@@ -237,8 +188,6 @@ public class LocationUpdatesService extends LifecycleService {
 
     @Override
     public void onDestroy() {
-        super.onDestroy();
-
         mServiceHandler.removeCallbacksAndMessages(null);
     }
 
@@ -248,13 +197,13 @@ public class LocationUpdatesService extends LifecycleService {
      */
     public void requestLocationUpdates() {
         Log.i(TAG, "Requesting location updates");
-        viewModel.setRequestingLocationUpdates(true);
+        Utils.setRequestingLocationUpdates(this, true);
         startService(new Intent(getApplicationContext(), LocationUpdatesService.class));
         try {
             mFusedLocationClient.requestLocationUpdates(mLocationRequest,
                     mLocationCallback, Looper.myLooper());
         } catch (SecurityException unlikely) {
-            viewModel.setRequestingLocationUpdates(false);
+            Utils.setRequestingLocationUpdates(this, false);
             Log.e(TAG, "Lost location permission. Could not request updates. " + unlikely);
         }
     }
@@ -267,10 +216,10 @@ public class LocationUpdatesService extends LifecycleService {
         Log.i(TAG, "Removing location updates");
         try {
             mFusedLocationClient.removeLocationUpdates(mLocationCallback);
-            viewModel.setRequestingLocationUpdates(false);
+            Utils.setRequestingLocationUpdates(this, false);
             stopSelf();
         } catch (SecurityException unlikely) {
-            viewModel.setRequestingLocationUpdates(true);
+            Utils.setRequestingLocationUpdates(this, true);
             Log.e(TAG, "Lost location permission. Could not remove updates. " + unlikely);
         }
     }
@@ -281,7 +230,7 @@ public class LocationUpdatesService extends LifecycleService {
     private Notification getNotification() {
         Intent intent = new Intent(this, LocationUpdatesService.class);
 
-        CharSequence text = viewModel.getLocationText(mLocation);
+        CharSequence text = Utils.getLocationText(mLocation);
 
         // Extra to help us figure out if we arrived in onStartCommand via the notification or not.
         intent.putExtra(EXTRA_STARTED_FROM_NOTIFICATION, true);
@@ -300,10 +249,10 @@ public class LocationUpdatesService extends LifecycleService {
                 .addAction(R.drawable.ic_cancel, getString(R.string.remove_location_updates),
                         servicePendingIntent)
                 .setContentText(text)
-                .setContentTitle(viewModel.getLocationTitle())
+                .setContentTitle(Utils.getLocationTitle(this))
                 .setOngoing(true)
                 .setPriority(Notification.PRIORITY_HIGH)
-                .setSmallIcon(R.mipmap.ic_launcher)
+                .setSmallIcon(R.drawable.ic_launcher)
                 .setTicker(text)
                 .setWhen(System.currentTimeMillis());
 
@@ -388,3 +337,4 @@ public class LocationUpdatesService extends LifecycleService {
         return false;
     }
 }
+

@@ -5,15 +5,17 @@ import android.content.SharedPreferences;
 import android.location.Location;
 import android.preference.PreferenceManager;
 import com.nitzanwerber.picflow.R;
+import com.nitzanwerber.picflow.utils.LocationUtilKt;
 
 import javax.inject.Inject;
 import java.text.DateFormat;
 import java.util.Date;
 import java.util.ResourceBundle;
 
+import static com.nitzanwerber.picflow.utils.LocationUtilKt.KEY_REQUESTING_LOCATION_UPDATES;
+
 public class LocationRepository {
 
-    static final String KEY_REQUESTING_LOCATION_UPDATES = "requesting_locaction_updates";
     private Context context;
     private SharedPreferences sharedPreferences;
 
@@ -47,18 +49,5 @@ public class LocationRepository {
                 .apply();
     }
 
-    /**
-     * Returns the {@code location} object as a human readable string.
-     *
-     * @param location The {@link Location}.
-     */
-    String getLocationText(Location location) {
-        return location == null ? "Unknown location" :
-                "(" + location.getLatitude() + ", " + location.getLongitude() + ")";
-    }
 
-    String getLocationTitle() {
-        return context.getString(R.string.location_updated,
-                DateFormat.getDateTimeInstance().format(new Date()));
-    }
 }

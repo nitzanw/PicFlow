@@ -3,4 +3,9 @@
     <string name="launch_activity">open the app!</string>
     <string name="remove_location_updates">stop getting my location</string>
     <string name="location_updated">Location Updated: %1$s</string>
+    <string name="request_location_updates">Request location updates</string>
+    <string name="permission_rationale">Location permission is needed for core functionality</string>
+    <string name="permission_denied_explanation">Permission was denied, but is needed for core functionality</string>
+    <string name="settings">Settings</string>
+
 </resources>

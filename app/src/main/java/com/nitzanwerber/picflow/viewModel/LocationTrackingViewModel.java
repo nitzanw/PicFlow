@@ -8,13 +8,12 @@ import javax.inject.Inject;
 
 public class LocationTrackingViewModel extends ViewModel {
 
+    @Inject LocationRepository locationRepository;
+
+    public LocationTrackingViewModel() { }
+
     public LocationRepository getLocationRepository() {
         return locationRepository;
-    }
-
-    @Inject private LocationRepository locationRepository;
-
-    public LocationTrackingViewModel() {
     }
 
 
