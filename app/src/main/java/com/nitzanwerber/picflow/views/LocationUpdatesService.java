@@ -14,8 +14,9 @@ import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 import com.google.android.gms.location.*;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
-import com.nitzanwerber.picflow.utils.Utils;
+import com.nitzanwerber.picflow.MyApp;
 import com.nitzanwerber.picflow.R;
+import com.nitzanwerber.picflow.viewModel.LocationTrackingViewModel;
 
 
 public class LocationUpdatesService extends Service {
@@ -54,6 +55,7 @@ public class LocationUpdatesService extends Service {
      * The identifier for the notification displayed for the foreground service.
      */
     private static final int NOTIFICATION_ID = 12345678;
+    private LocationTrackingViewModel viewModel;
 
     /**
      * Used to check whether the bound activity has really gone away and not unbound as part of an
@@ -87,10 +89,13 @@ public class LocationUpdatesService extends Service {
     private Location mLocation;
 
     public LocationUpdatesService() {
+
     }
 
     @Override
     public void onCreate() {
+        viewModel = new LocationTrackingViewModel();
+        ((MyApp)this.getApplicationContext()).getAppComponent().inject(viewModel);
         mFusedLocationClient = LocationServices.getFusedLocationProviderClient(this);
 
         mLocationCallback = new LocationCallback() {
@@ -171,7 +176,7 @@ public class LocationUpdatesService extends Service {
         // Called when the last client (MainActivity in case of this sample) unbinds from this
         // service. If this method is called due to a configuration change in MainActivity, we
         // do nothing. Otherwise, we make this service a foreground service.
-        if (!mChangingConfiguration && Utils.requestingLocationUpdates(this)) {
+        if (!mChangingConfiguration && viewModel.requestingLocationUpdates()) {
             Log.i(TAG, "Starting foreground service");
 
             if (Build.VERSION.SDK_INT == Build.VERSION_CODES.O) {
@@ -197,13 +202,13 @@ public class LocationUpdatesService extends Service {
      */
     public void requestLocationUpdates() {
         Log.i(TAG, "Requesting location updates");
-        Utils.setRequestingLocationUpdates(this, true);
+        viewModel.setRequestingLocationUpdates(true);
         startService(new Intent(getApplicationContext(), LocationUpdatesService.class));
         try {
             mFusedLocationClient.requestLocationUpdates(mLocationRequest,
                     mLocationCallback, Looper.myLooper());
         } catch (SecurityException unlikely) {
-            Utils.setRequestingLocationUpdates(this, false);
+            viewModel.setRequestingLocationUpdates(false);
             Log.e(TAG, "Lost location permission. Could not request updates. " + unlikely);
         }
     }
@@ -216,10 +221,10 @@ public class LocationUpdatesService extends Service {
         Log.i(TAG, "Removing location updates");
         try {
             mFusedLocationClient.removeLocationUpdates(mLocationCallback);
-            Utils.setRequestingLocationUpdates(this, false);
+            viewModel.setRequestingLocationUpdates(false);
             stopSelf();
         } catch (SecurityException unlikely) {
-            Utils.setRequestingLocationUpdates(this, true);
+            viewModel.setRequestingLocationUpdates(true);
             Log.e(TAG, "Lost location permission. Could not remove updates. " + unlikely);
         }
     }
@@ -230,7 +235,7 @@ public class LocationUpdatesService extends Service {
     private Notification getNotification() {
         Intent intent = new Intent(this, LocationUpdatesService.class);
 
-        CharSequence text = Utils.getLocationText(mLocation);
+        CharSequence text = viewModel.getLocationText(mLocation);
 
         // Extra to help us figure out if we arrived in onStartCommand via the notification or not.
         intent.putExtra(EXTRA_STARTED_FROM_NOTIFICATION, true);
@@ -246,10 +251,10 @@ public class LocationUpdatesService extends Service {
         NotificationCompat.Builder builder = new NotificationCompat.Builder(this)
                 .addAction(R.drawable.ic_launch, getString(R.string.launch_activity),
                         activityPendingIntent)
-                .addAction(R.drawable.ic_cancel, getString(R.string.remove_location_updates),
+                .addAction(R.drawable.ic_cancel, getString(R.string.stop),
                         servicePendingIntent)
                 .setContentText(text)
-                .setContentTitle(Utils.getLocationTitle(this))
+                .setContentTitle(viewModel.getLocationTitle(this))
                 .setOngoing(true)
                 .setPriority(Notification.PRIORITY_HIGH)
                 .setSmallIcon(R.drawable.ic_launcher)

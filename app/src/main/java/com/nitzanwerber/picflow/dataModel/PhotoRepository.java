@@ -19,8 +19,8 @@ public class PhotoRepository {
     public FlickerAPIInterface flickerService;
 
     @Inject
-    public PhotoRepository(FlickerAPIInterface flickerService) {
-        this.flickerService = flickerService;
+    public PhotoRepository(FlickerAPIInterface apiInterface) {
+        this.flickerService = apiInterface;
     }
 
     public LiveData<FlickrPhotosSearchResponse> getPhotoPerLocation(String lan, String lon) {

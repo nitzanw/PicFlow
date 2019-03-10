@@ -7,6 +7,7 @@ import com.nitzanwerber.picflow.module.AppModule;
 import com.nitzanwerber.picflow.module.PicassoModule;
 import com.nitzanwerber.picflow.module.ServiceUtilModule;
 import com.nitzanwerber.picflow.module.ViewModelModule;
+import com.nitzanwerber.picflow.viewModel.LocationTrackingViewModel;
 import com.nitzanwerber.picflow.views.MainActivity;
 import com.nitzanwerber.picflow.views.PictureFlowFragment;
 import com.nitzanwerber.picflow.dataModel.PhotoRepository;
@@ -26,6 +27,8 @@ public interface AppComponent {
     void inject(MainActivity activity);
     void inject(PictureFlowFragment flowFragment);
     void inject(LocationRepository locationRepository);
+    void inject(LocationTrackingViewModel locationTrackingViewModel);
+
 
     Retrofit retrofit();
     OkHttpClient okHttpClient();
