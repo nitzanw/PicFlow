@@ -13,18 +13,22 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.Button;
 import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
+import androidx.lifecycle.ViewModelProviders;
 import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 import com.google.android.material.snackbar.Snackbar;
 import com.nitzanwerber.picflow.BuildConfig;
+import com.nitzanwerber.picflow.MyApp;
 import com.nitzanwerber.picflow.R;
 import com.nitzanwerber.picflow.utils.ActivityUtil;
-import com.nitzanwerber.picflow.utils.Utils;
-import com.nitzanwerber.picflow.viewModel.MainActivityViewModel;
+import com.nitzanwerber.picflow.utils.LocationUtilKt;
+import com.nitzanwerber.picflow.viewModel.PhotoFlowViewModel;
+import com.nitzanwerber.picflow.viewModel.ViewModelFactory;
+
+import javax.inject.Inject;
 
 public class MainActivity extends AppCompatActivity implements
         SharedPreferences.OnSharedPreferenceChangeListener {
@@ -43,10 +47,14 @@ public class MainActivity extends AppCompatActivity implements
     private boolean mBound = false;
 
     // UI elements.
-    private Button mRequestLocationUpdatesButton;
-    private Button mRemoveLocationUpdatesButton;
     private MenuItem startButton;
     private MenuItem stopButton;
+
+    // viewModel
+    private PhotoFlowViewModel viewModel;
+
+    @Inject
+    public ViewModelFactory viewModelFactory;
 
     // Monitors the state of the connection to the service.
     private final ServiceConnection mServiceConnection = new ServiceConnection() {
@@ -69,7 +77,10 @@ public class MainActivity extends AppCompatActivity implements
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        ((MyApp) getApplicationContext()).getAppComponent().inject(this);
         super.onCreate(savedInstanceState);
+        viewModel = ViewModelProviders.of(this, viewModelFactory).get(PhotoFlowViewModel.class);
+//        viewModel.init();
         myReceiver = new MyReceiver();
         setContentView(R.layout.activity_main);
         new ActivityUtil().addFragmentToActivity(
@@ -79,7 +90,7 @@ public class MainActivity extends AppCompatActivity implements
         );
 
         // Check that the user hasn't revoked permissions by going to Settings.
-        if (Utils.requestingLocationUpdates(this)) {
+        if (viewModel.requestingLocationUpdates()) {
             if (!checkPermissions()) {
                 requestPermissions();
             }
@@ -98,7 +109,7 @@ public class MainActivity extends AppCompatActivity implements
     public boolean onPrepareOptionsMenu(Menu menu) {
         super.onPrepareOptionsMenu(menu);
         // Restore the state of the buttons when the activity (re)launches.
-        setButtonsState(Utils.requestingLocationUpdates(this));
+        setButtonsState(viewModel.requestingLocationUpdates());
         return true;
     }
 
@@ -126,23 +137,13 @@ public class MainActivity extends AppCompatActivity implements
         // that since this activity is in the foreground, the service can exit foreground mode.
         bindService(new Intent(this, LocationUpdatesService.class), mServiceConnection,
                 Context.BIND_AUTO_CREATE);
-    }
-
-    @Override
-    protected void onResume() {
-        super.onResume();
         LocalBroadcastManager.getInstance(this).registerReceiver(myReceiver,
                 new IntentFilter(LocationUpdatesService.ACTION_BROADCAST));
     }
 
     @Override
-    protected void onPause() {
-        LocalBroadcastManager.getInstance(this).unregisterReceiver(myReceiver);
-        super.onPause();
-    }
-
-    @Override
     protected void onStop() {
+        LocalBroadcastManager.getInstance(this).unregisterReceiver(myReceiver);
         if (mBound) {
             // Unbind from the service. This signals to the service that this activity is no longer
             // in the foreground, and the service can respond by promoting itself to a foreground
@@ -244,9 +245,15 @@ public class MainActivity extends AppCompatActivity implements
     private class MyReceiver extends BroadcastReceiver {
         @Override
         public void onReceive(Context context, Intent intent) {
-            Location location = intent.getParcelableExtra(LocationUpdatesService.EXTRA_LOCATION);
+            final Location location = intent.getParcelableExtra(LocationUpdatesService.EXTRA_LOCATION);
             if (location != null) {
-                Toast.makeText(MainActivity.this, Utils.getLocationText(location),
+//                MainActivity.this.runOnUiThread(new Runnable() {
+//                    @Override
+//                    public void run() {
+//                        viewModel.addImageAccordingToLocation(location);
+//                    }
+//                });
+                Toast.makeText(MainActivity.this, LocationUtilKt.getLocationText(location),
                         Toast.LENGTH_SHORT).show();
             }
         }
@@ -255,10 +262,20 @@ public class MainActivity extends AppCompatActivity implements
     @Override
     public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String s) {
         // Update the buttons state depending on whether location updates are being requested.
-        if (s.equals(Utils.KEY_REQUESTING_LOCATION_UPDATES)) {
-            setButtonsState(sharedPreferences.getBoolean(Utils.KEY_REQUESTING_LOCATION_UPDATES,
+        if (s.equals(LocationUtilKt.KEY_REQUESTING_LOCATION_UPDATES)) {
+            setButtonsState(sharedPreferences.getBoolean(LocationUtilKt.KEY_REQUESTING_LOCATION_UPDATES,
                     false));
         }
+
+//        else if(s.equals(LocationUtilKt.LAST_KNOWN_LOCATION)){
+//            MainActivity.this.runOnUiThread(new Runnable() {
+//                @Override
+//                public void run() {
+//                    Log.wtf("MainActivity!!!!onSharedPreferenceChanged", "Im here:)");
+//                    viewModel.addImageAccordingToLocation();
+//                }
+//            });
+//        }
     }
 
     private void setButtonsState(boolean requestingLocationUpdates) {

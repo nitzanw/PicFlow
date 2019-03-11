@@ -2,7 +2,6 @@ package com.nitzanwerber.picflow.module;
 
 import androidx.lifecycle.ViewModel;
 import com.nitzanwerber.picflow.dataModel.LocationRepository;
-import com.nitzanwerber.picflow.viewModel.LocationTrackingViewModel;
 import com.nitzanwerber.picflow.viewModel.PhotoFlowViewModel;
 import com.nitzanwerber.picflow.viewModel.ViewModelFactory;
 import com.nitzanwerber.picflow.dataModel.PhotoRepository;
@@ -39,8 +38,9 @@ public class ViewModelModule {
     @Provides
     @IntoMap
     @ViewModelKey(PhotoFlowViewModel.class)
-    public ViewModel viewModel1(PhotoRepository photoRepository) {
-        return new PhotoFlowViewModel(photoRepository);
+    public ViewModel viewModel1(PhotoRepository photoRepository, LocationRepository locationRepository) {
+        return new PhotoFlowViewModel(photoRepository, locationRepository);
     }
+
 
 }

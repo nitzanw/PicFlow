@@ -20,6 +20,7 @@ public class PicassoModule {
                 .downloader(okHttp3Downloader)
                 .build();
     }
+
     @Provides
     @Singleton
     OkHttp3Downloader getOkHttp3Downloader(OkHttpClient okHttpClient) {

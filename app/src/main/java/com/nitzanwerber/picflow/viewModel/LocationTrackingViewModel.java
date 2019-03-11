@@ -2,17 +2,17 @@ package com.nitzanwerber.picflow.viewModel;
 
 import android.content.Context;
 import android.location.Location;
+import androidx.lifecycle.LiveData;
 import androidx.lifecycle.ViewModel;
-import com.nitzanwerber.picflow.MyApp;
 import com.nitzanwerber.picflow.dataModel.LocationRepository;
 import com.nitzanwerber.picflow.utils.LocationUtilKt;
-import com.nitzanwerber.picflow.utils.Utils;
 
 import javax.inject.Inject;
 
 public class LocationTrackingViewModel extends ViewModel {
 
-    @Inject LocationRepository locationRepository;
+    @Inject
+    LocationRepository locationRepository;
 
     public LocationTrackingViewModel() {
 
@@ -22,6 +22,9 @@ public class LocationTrackingViewModel extends ViewModel {
         return locationRepository;
     }
 
+    public void setLocation(Location location){
+        locationRepository.setLocation(location);
+    }
 
     public boolean requestingLocationUpdates() {
         return locationRepository.requestingLocationUpdates();
@@ -38,4 +41,9 @@ public class LocationTrackingViewModel extends ViewModel {
     public CharSequence getLocationTitle(Context context) {
         return LocationUtilKt.getLocationTitle(context);
     }
+
+    public void saveLastKnownLocation(Location location) {
+        locationRepository.saveLastKnownLocation(location);
+    }
+
 }

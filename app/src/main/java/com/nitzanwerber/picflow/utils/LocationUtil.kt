@@ -8,6 +8,8 @@ import java.util.*
 
 
 const val KEY_REQUESTING_LOCATION_UPDATES = "requesting_locaction_updates"
+const val LAST_KNOWN_LOCATION = "last_known_location"
+
 
 /**
  * Returns the `location` object as a human readable string.

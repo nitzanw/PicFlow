@@ -1,6 +1,6 @@
 package com.nitzanwerber.picflow;
 
-import com.nitzanwerber.picflow.dataModel.pojo.FlickrPhotosSearchResponse;
+import com.nitzanwerber.picflow.dataModel.dto.FlickrPhotosSearchResponse;
 import dagger.Module;
 import retrofit2.Call;
 import retrofit2.http.GET;

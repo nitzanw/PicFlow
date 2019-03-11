@@ -42,7 +42,7 @@ public class LocationUpdatesService extends Service {
     /**
      * The desired interval for location updates. Inexact. Updates may be more or less frequent.
      */
-    private static final long UPDATE_INTERVAL_IN_MILLISECONDS = 10000;
+    private static final long UPDATE_INTERVAL_IN_MILLISECONDS = 2 * 10000;
 
     /**
      * The fastest rate for active location updates. Updates will never be more frequent
@@ -95,7 +95,7 @@ public class LocationUpdatesService extends Service {
     @Override
     public void onCreate() {
         viewModel = new LocationTrackingViewModel();
-        ((MyApp)this.getApplicationContext()).getAppComponent().inject(viewModel);
+        ((MyApp) this.getApplicationContext()).getAppComponent().inject(viewModel);
         mFusedLocationClient = LocationServices.getFusedLocationProviderClient(this);
 
         mLocationCallback = new LocationCallback() {
@@ -277,6 +277,8 @@ public class LocationUpdatesService extends Service {
                         public void onComplete(@NonNull Task<Location> task) {
                             if (task.isSuccessful() && task.getResult() != null) {
                                 mLocation = task.getResult();
+                                viewModel.setLocation(mLocation);
+//                                viewModel.saveLastKnownLocation(mLocation);
                             } else {
                                 Log.w(TAG, "Failed to get location.");
                             }
@@ -291,7 +293,8 @@ public class LocationUpdatesService extends Service {
         Log.i(TAG, "New location: " + location);
 
         mLocation = location;
-
+        viewModel.setLocation(mLocation);
+//        viewModel.saveLastKnownLocation(mLocation);
         // Notify anyone listening for broadcasts about the new location.
         Intent intent = new Intent(ACTION_BROADCAST);
         intent.putExtra(EXTRA_LOCATION, location);
