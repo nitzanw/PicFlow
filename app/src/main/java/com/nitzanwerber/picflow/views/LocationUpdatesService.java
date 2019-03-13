@@ -278,7 +278,6 @@ public class LocationUpdatesService extends Service {
                             if (task.isSuccessful() && task.getResult() != null) {
                                 mLocation = task.getResult();
                                 viewModel.setLocation(mLocation);
-//                                viewModel.saveLastKnownLocation(mLocation);
                             } else {
                                 Log.w(TAG, "Failed to get location.");
                             }

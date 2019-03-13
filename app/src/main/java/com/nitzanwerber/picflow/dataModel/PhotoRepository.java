@@ -3,7 +3,6 @@ package com.nitzanwerber.picflow.dataModel;
 import android.util.Log;
 import androidx.lifecycle.MutableLiveData;
 import com.nitzanwerber.picflow.FlickerAPIInterface;
-import com.nitzanwerber.picflow.dataModel.dto.FlickerPrePhoto;
 import com.nitzanwerber.picflow.dataModel.dto.FlickrPhotosSearchResponse;
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -27,7 +26,7 @@ public class PhotoRepository {
         final MutableLiveData<FlickrPhotosSearchResponse> data = new MutableLiveData<>();
 
         flickerService.getPhotos(FlickerAPIInterface.API_KEY, FlickerAPIInterface.METHOD_FLICKR_SEARCH,lat, lon,
-                "love", 1,"1", "json", "url_s").enqueue(new Callback<FlickrPhotosSearchResponse>() {
+                1,"1", "json", "url_l").enqueue(new Callback<FlickrPhotosSearchResponse>() {
             @Override
             public void onResponse(Call<FlickrPhotosSearchResponse> call, Response<FlickrPhotosSearchResponse> response) {
                 data.setValue(response.body());

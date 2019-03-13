@@ -54,11 +54,6 @@ public class ServiceUtilModule {
         return retrofit;
     }
 
-//    @Provides
-//    @Singleton
-//    OkHttp3Downloader provideOkHttp3Downloader(OkHttpClient okHttpClient) {
-//        return new OkHttp3Downloader(okHttpClient);
-//    }
 
     @Provides
     @Singleton

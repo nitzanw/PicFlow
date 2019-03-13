@@ -24,6 +24,7 @@ public class NetworkModule {
     Cache getCache(File cacheFile) {
         return new Cache(cacheFile, 10 * 1000 * 1000);  // 10 MiB cache
     }
+
     @Provides
     @Singleton
     File getFile(@Singleton Context context) {
@@ -32,25 +33,6 @@ public class NetworkModule {
             file.mkdirs();
         return file;
     }
-//    @Provides
-//    @Singleton
-//    OkHttpClient getOkHttpClient(HttpLoggingInterceptor interceptor, Cache cache) {
-//        return new OkHttpClient.Builder()
-//                .writeTimeout(15, TimeUnit.SECONDS)
-//                .readTimeout(15, TimeUnit.SECONDS)
-//                .connectTimeout(15, TimeUnit.SECONDS)
-//                .cache(cache)
-//                .addInterceptor(interceptor)
-//                .build();
-//    }
-
-//    @Provides
-//    @Singleton
-//    Cache provideOkHttpCache(Application application) {
-//        int cacheSize = 10 * 1024 * 1024; // 10 MiB
-//        Cache cache = new Cache(application.getCacheDir(), cacheSize);
-//        return cache;
-//    }
 
     @Provides
     @Singleton

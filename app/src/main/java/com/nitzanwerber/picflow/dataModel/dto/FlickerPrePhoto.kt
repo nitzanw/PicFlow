@@ -13,7 +13,7 @@ data class FlickerPrePhoto (
     val ispublic: Int = 0,
     val isfriend: Int = 0,
     val isfamily: Int = 0,
-    val url_s: String? = ""
+    val url_l: String? = ""
 ): Parcelable {
     constructor(parcel: Parcel) : this(
         parcel.readString(),
@@ -39,7 +39,7 @@ data class FlickerPrePhoto (
         parcel.writeInt(ispublic)
         parcel.writeInt(isfriend)
         parcel.writeInt(isfamily)
-        parcel.writeString(url_s)
+        parcel.writeString(url_l)
     }
 
     override fun describeContents(): Int {

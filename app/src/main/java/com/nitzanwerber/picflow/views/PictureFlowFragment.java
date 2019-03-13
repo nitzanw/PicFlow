@@ -67,9 +67,8 @@ public class PictureFlowFragment extends Fragment {
         viewModel.getPhotoResponse().observe(this.getActivity(), new Observer<FlickrPhotosSearchResponse>() {
             @Override
             public void onChanged(FlickrPhotosSearchResponse response) {
-                Log.d(MYAPP, Log.getStackTraceString(new Exception()));
                 Log.d("!!!!!!!!!", "onChanged");
-                if (response != null) {
+                if (response != null && viewModel.requestingLocationUpdates()) {
                     Log.d("!!!!!!!!!", "data has arrived!");
                     viewAdapter.updateData(response);
                 }

@@ -10,6 +10,7 @@ import com.nitzanwerber.picflow.R
 import com.nitzanwerber.picflow.dataModel.dto.FlickerPrePhoto
 import com.nitzanwerber.picflow.dataModel.dto.FlickrPhotosSearchResponse
 import com.squareup.picasso.Picasso
+import kotlinx.android.synthetic.main.pic_flow_item.view.*
 import java.util.ArrayList
 
 
@@ -20,14 +21,15 @@ class PhotoAdapter(
     RecyclerView.Adapter<PhotoAdapter.ImageHolder>() {
 
     override fun onBindViewHolder(holder: ImageHolder, position: Int) {
-        Log.wtf("onBindViewHolder", myDataset[position].url_s)
-        var photoUrl = myDataset[position].url_s
+        Log.wtf("onBindViewHolder", myDataset[position].url_l)
+        var photoUrl = myDataset[position].url_l
         if (photoUrl.isNullOrEmpty()) {
             //some photos don't have urls - thus we need to construct them
             photoUrl = createUrl(myDataset[position])
         }
-
-        picasso.load(photoUrl).into(holder.imageView)
+        picasso.load(photoUrl)
+            .placeholder( R.drawable.progress_animation)
+            .into(holder.imageView)
 
     }
 
@@ -51,7 +53,7 @@ class PhotoAdapter(
 
     fun updateData(data: FlickrPhotosSearchResponse) {
         Log.wtf("updateData1", " update data! " + myDataset.size)
-        myDataset.add(data.photos.photo[0])
+        myDataset.add(0,data.photos.photo[0])
         this.notifyDataSetChanged();
         Log.wtf("updateData2", " update data! " + myDataset.size)
     }

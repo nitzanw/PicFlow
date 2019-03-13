@@ -3,6 +3,7 @@ package com.nitzanwerber.picflow.views;
 import android.Manifest;
 import android.content.*;
 import android.content.pm.PackageManager;
+import android.graphics.drawable.ColorDrawable;
 import android.location.Location;
 import android.net.Uri;
 import android.os.Bundle;
@@ -15,6 +16,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Toast;
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.lifecycle.ViewModelProviders;
@@ -79,8 +81,8 @@ public class MainActivity extends AppCompatActivity implements
     protected void onCreate(Bundle savedInstanceState) {
         ((MyApp) getApplicationContext()).getAppComponent().inject(this);
         super.onCreate(savedInstanceState);
+        getSupportActionBar().setDisplayShowTitleEnabled(false);
         viewModel = ViewModelProviders.of(this, viewModelFactory).get(PhotoFlowViewModel.class);
-//        viewModel.init();
         myReceiver = new MyReceiver();
         setContentView(R.layout.activity_main);
         new ActivityUtil().addFragmentToActivity(
@@ -247,12 +249,6 @@ public class MainActivity extends AppCompatActivity implements
         public void onReceive(Context context, Intent intent) {
             final Location location = intent.getParcelableExtra(LocationUpdatesService.EXTRA_LOCATION);
             if (location != null) {
-//                MainActivity.this.runOnUiThread(new Runnable() {
-//                    @Override
-//                    public void run() {
-//                        viewModel.addImageAccordingToLocation(location);
-//                    }
-//                });
                 Toast.makeText(MainActivity.this, LocationUtilKt.getLocationText(location),
                         Toast.LENGTH_SHORT).show();
             }
@@ -266,16 +262,6 @@ public class MainActivity extends AppCompatActivity implements
             setButtonsState(sharedPreferences.getBoolean(LocationUtilKt.KEY_REQUESTING_LOCATION_UPDATES,
                     false));
         }
-
-//        else if(s.equals(LocationUtilKt.LAST_KNOWN_LOCATION)){
-//            MainActivity.this.runOnUiThread(new Runnable() {
-//                @Override
-//                public void run() {
-//                    Log.wtf("MainActivity!!!!onSharedPreferenceChanged", "Im here:)");
-//                    viewModel.addImageAccordingToLocation();
-//                }
-//            });
-//        }
     }
 
     private void setButtonsState(boolean requestingLocationUpdates) {

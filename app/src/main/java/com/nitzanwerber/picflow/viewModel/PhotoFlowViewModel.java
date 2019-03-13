@@ -43,28 +43,12 @@ public class PhotoFlowViewModel extends ViewModel {
         });
         Log.wtf("photoflowviewmodel!!!!addImageAccordingToLocation", "Im here:)");
 
-//        addImageAccordingToLocation();
     }
 
 
-    public LocationRepository getLocationRepository() {
-        return locationRepository;
-    }
 
     public LiveData<FlickrPhotosSearchResponse> getPhotoResponse() {
         return photoResponse;
-    }
-
-    public void addImageAccordingToLocation() {
-        Log.wtf("!!!!addImageAccordingToLocation", "Im here:)");
-        Location location = locationRepository.getLastKnownLocation();
-        if (location.getLatitude() == 0 && location.getLongitude() == 0) {
-            location = new Location("location");//locationRepository.getLastKnownLocation();
-            location.setLatitude(47.458215);
-            location.setLongitude(19.229079);
-        }
-        photoResponse = photoRepository.getPhotoPerLocation(
-                String.valueOf(location.getLatitude()), String.valueOf(location.getLongitude()));
     }
 
     public boolean requestingLocationUpdates() {
