@@ -44,6 +44,7 @@ public class LocationUpdatesService extends Service {
      */
     private static final long UPDATE_INTERVAL_IN_MILLISECONDS = 2 * 10000;
 
+
     /**
      * The fastest rate for active location updates. Updates will never be more frequent
      * than this value.
@@ -182,8 +183,6 @@ public class LocationUpdatesService extends Service {
             if (Build.VERSION.SDK_INT == Build.VERSION_CODES.O) {
                 ContextCompat.startForegroundService(this, new Intent(this,
                         LocationUpdatesService.class));
-            } else {
-                startForeground(NOTIFICATION_ID, getNotification());
             }
 
             startForeground(NOTIFICATION_ID, getNotification());
@@ -293,7 +292,6 @@ public class LocationUpdatesService extends Service {
 
         mLocation = location;
         viewModel.setLocation(mLocation);
-//        viewModel.saveLastKnownLocation(mLocation);
         // Notify anyone listening for broadcasts about the new location.
         Intent intent = new Intent(ACTION_BROADCAST);
         intent.putExtra(EXTRA_LOCATION, location);

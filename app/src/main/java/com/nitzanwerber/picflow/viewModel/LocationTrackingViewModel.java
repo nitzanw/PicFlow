@@ -2,7 +2,6 @@ package com.nitzanwerber.picflow.viewModel;
 
 import android.content.Context;
 import android.location.Location;
-import androidx.lifecycle.LiveData;
 import androidx.lifecycle.ViewModel;
 import com.nitzanwerber.picflow.dataModel.LocationRepository;
 import com.nitzanwerber.picflow.utils.LocationUtilKt;
@@ -16,10 +15,6 @@ public class LocationTrackingViewModel extends ViewModel {
 
     public LocationTrackingViewModel() {
 
-    }
-
-    public LocationRepository getLocationRepository() {
-        return locationRepository;
     }
 
     public void setLocation(Location location){

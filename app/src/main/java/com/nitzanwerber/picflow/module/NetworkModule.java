@@ -12,6 +12,7 @@ import java.io.File;
 
 @Module(includes = AppModule.class)
 public class NetworkModule {
+
     @Provides
     @Singleton
     HttpLoggingInterceptor getInterceptor() {

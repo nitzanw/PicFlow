@@ -7,7 +7,6 @@ import com.google.gson.FieldNamingPolicy;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.nitzanwerber.picflow.FlickerAPIInterface;
-import com.nitzanwerber.picflow.module.NetworkModule;
 import dagger.Module;
 import dagger.Provides;
 import okhttp3.OkHttpClient;

@@ -33,7 +33,7 @@ class PhotoAdapter(
 
     }
 
-    private fun createUrl(flickerPrePhoto: FlickerPrePhoto): String? {
+    private fun createUrl(flickerPrePhoto: FlickerPrePhoto): String {
         var farmId = flickerPrePhoto.farm
         var serverId = flickerPrePhoto.server
         var ID = flickerPrePhoto.id
@@ -65,11 +65,9 @@ class PhotoAdapter(
     fun setDataset(data : ArrayList<FlickerPrePhoto> ){
         myDataset = data;
     }
+
     class ImageHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-
         val imageView: ImageView = itemView.findViewById(R.id.photo_image_view)
-
-
     }
 
 }

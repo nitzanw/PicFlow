@@ -2,9 +2,9 @@ package com.nitzanwerber.picflow.module;
 
 import androidx.lifecycle.ViewModel;
 import com.nitzanwerber.picflow.dataModel.LocationRepository;
+import com.nitzanwerber.picflow.dataModel.PhotoRepository;
 import com.nitzanwerber.picflow.viewModel.PhotoFlowViewModel;
 import com.nitzanwerber.picflow.viewModel.ViewModelFactory;
-import com.nitzanwerber.picflow.dataModel.PhotoRepository;
 import dagger.MapKey;
 import dagger.Module;
 import dagger.Provides;
@@ -41,6 +41,5 @@ public class ViewModelModule {
     public ViewModel viewModel1(PhotoRepository photoRepository, LocationRepository locationRepository) {
         return new PhotoFlowViewModel(photoRepository, locationRepository);
     }
-
 
 }

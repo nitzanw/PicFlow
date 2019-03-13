@@ -2,13 +2,11 @@ package com.nitzanwerber.picflow.dataModel;
 
 import android.content.SharedPreferences;
 import android.location.Location;
-import android.os.Build;
 import androidx.lifecycle.MutableLiveData;
+import com.nitzanwerber.picflow.utils.LocationUtilKt;
 
 import javax.inject.Inject;
 import javax.inject.Singleton;
-
-import java.util.Optional;
 
 import static com.nitzanwerber.picflow.utils.LocationUtilKt.KEY_REQUESTING_LOCATION_UPDATES;
 import static com.nitzanwerber.picflow.utils.LocationUtilKt.LAST_KNOWN_LOCATION;
@@ -32,10 +30,11 @@ public class LocationRepository {
         return currentLocation;
     }
 
-    public void setLocation(Location location) {
-        currentLocation.setValue(location);
+    public void setLocation(Location newLocation) {
+        if(true || LocationUtilKt.locationShouldUpdate(currentLocation,newLocation)){
+            currentLocation.setValue(newLocation);
+        }
     }
-
 
     /**
      * Returns true if requesting location updates, otherwise returns false.

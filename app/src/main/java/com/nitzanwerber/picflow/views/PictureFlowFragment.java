@@ -28,7 +28,6 @@ import java.util.ArrayList;
 
 public class PictureFlowFragment extends Fragment {
 
-    private static final String MYAPP = "PicFlow";
     private PhotoFlowViewModel viewModel;
     private PhotoAdapter viewAdapter;
     private RecyclerView recycleView;
@@ -63,16 +62,12 @@ public class PictureFlowFragment extends Fragment {
     }
 
     private void subscribeUi(final PhotoAdapter viewAdapter) {
-        //31.848882,34.922238
         viewModel.getPhotoResponse().observe(this.getActivity(), new Observer<FlickrPhotosSearchResponse>() {
             @Override
             public void onChanged(FlickrPhotosSearchResponse response) {
-                Log.d("!!!!!!!!!", "onChanged");
                 if (response != null && viewModel.requestingLocationUpdates()) {
-                    Log.d("!!!!!!!!!", "data has arrived!");
                     viewAdapter.updateData(response);
                 }
-
             }
         });
     }
