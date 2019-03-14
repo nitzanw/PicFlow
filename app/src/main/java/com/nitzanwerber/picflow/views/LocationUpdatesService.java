@@ -18,11 +18,13 @@ import com.nitzanwerber.picflow.MyApp;
 import com.nitzanwerber.picflow.R;
 import com.nitzanwerber.picflow.viewModel.LocationTrackingViewModel;
 
+import java.util.LinkedList;
+
 
 public class LocationUpdatesService extends Service {
 
     private static final String PACKAGE_NAME =
-            "com.google.android.gms.location.sample.locationupdatesforegroundservice";
+            "com.nitzanwerber.picflow.views.LocationUpdatesService";
 
     private static final String TAG = LocationUpdatesService.class.getSimpleName();
 
@@ -88,6 +90,10 @@ public class LocationUpdatesService extends Service {
      * The current location.
      */
     private Location mLocation;
+    /**
+     * The location queue for forgroundService
+     */
+    private LinkedList<Location> locationsQueue = new LinkedList<>();
 
     public LocationUpdatesService() {
 
@@ -150,7 +156,7 @@ public class LocationUpdatesService extends Service {
 
     @Override
     public IBinder onBind(Intent intent) {
-        // Called when a client (MainActivity in case of this sample) comes to the foreground
+        // Called when a client (MainActivity) comes to the foreground
         // and binds with this service. The service should cease to be a foreground service
         // when that happens.
         Log.i(TAG, "in onBind()");
@@ -161,23 +167,26 @@ public class LocationUpdatesService extends Service {
 
     @Override
     public void onRebind(Intent intent) {
-        // Called when a client (MainActivity in case of this sample) returns to the foreground
+        // Called when a client (MainActivity) returns to the foreground
         // and binds once again with this service. The service should cease to be a foreground
         // service when that happens.
         Log.i(TAG, "in onRebind()");
         stopForeground(true);
         mChangingConfiguration = false;
         super.onRebind(intent);
+        //update the photo feed with all locations that happened in the background
+        viewModel.setLocationQueue(locationsQueue);
+        locationsQueue.clear();
     }
 
     @Override
     public boolean onUnbind(Intent intent) {
         Log.i(TAG, "Last client unbound from service");
 
-        // Called when the last client (MainActivity in case of this sample) unbinds from this
+        // Called when the last client (MainActivity) unbinds from this
         // service. If this method is called due to a configuration change in MainActivity, we
         // do nothing. Otherwise, we make this service a foreground service.
-        if (!mChangingConfiguration && viewModel.requestingLocationUpdates()) {
+        if (!mChangingConfiguration && viewModel.isRequestingLocationUpdates()) {
             Log.i(TAG, "Starting foreground service");
 
             if (Build.VERSION.SDK_INT == Build.VERSION_CODES.O) {
@@ -300,6 +309,7 @@ public class LocationUpdatesService extends Service {
         // Update notification content if running as a foreground service.
         if (serviceIsRunningInForeground(this)) {
             mNotificationManager.notify(NOTIFICATION_ID, getNotification());
+            locationsQueue.add(mLocation);
         }
     }
 

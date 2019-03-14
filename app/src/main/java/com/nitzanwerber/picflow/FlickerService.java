@@ -9,7 +9,7 @@ import retrofit2.http.Query;
 
 
 @Module
-public interface FlickerAPIInterface {
+public interface FlickerService {
 
     String HTTPS_API = "https://api.flickr.com/";
     String API_KEY = "e601c0ab6569cf69e99a31522bbf2bed";

@@ -9,7 +9,6 @@ import java.util.*
 
 
 const val KEY_REQUESTING_LOCATION_UPDATES = "requesting_locaction_updates"
-const val LAST_KNOWN_LOCATION = "last_known_location"
 const val DISTANCE_IN_METERS_BETWEEN_PHOTO_UPDATE = 100.0F
 
 
@@ -40,4 +39,5 @@ fun locationShouldUpdate(currentLocation: MutableLiveData<Location>, newLocation
     }
     return true;
 }
+operator fun Number.compareTo(other: Number) = this.toDouble().compareTo(other.toDouble())
 

@@ -6,7 +6,7 @@ import android.preference.PreferenceManager;
 import com.google.gson.FieldNamingPolicy;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
-import com.nitzanwerber.picflow.FlickerAPIInterface;
+import com.nitzanwerber.picflow.FlickerService;
 import dagger.Module;
 import dagger.Provides;
 import okhttp3.OkHttpClient;
@@ -56,7 +56,7 @@ public class ServiceUtilModule {
 
     @Provides
     @Singleton
-    FlickerAPIInterface getFlickerApiInterface(Retrofit retroFit) {
-        return retroFit.create(FlickerAPIInterface.class);
+    FlickerService provideFlickerApiInterface(Retrofit retroFit) {
+        return retroFit.create(FlickerService.class);
     }
 }

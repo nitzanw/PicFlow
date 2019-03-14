@@ -17,6 +17,7 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 import java.util.Map;
+import java.util.concurrent.Executor;
 
 //*This class enables the reuse of the same viewModel in different fragments
 @Module

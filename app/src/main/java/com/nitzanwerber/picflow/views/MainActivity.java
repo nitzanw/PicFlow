@@ -3,7 +3,6 @@ package com.nitzanwerber.picflow.views;
 import android.Manifest;
 import android.content.*;
 import android.content.pm.PackageManager;
-import android.graphics.drawable.ColorDrawable;
 import android.location.Location;
 import android.net.Uri;
 import android.os.Bundle;
@@ -19,6 +18,7 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
+import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
 import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 import com.google.android.material.snackbar.Snackbar;
@@ -32,8 +32,7 @@ import com.nitzanwerber.picflow.viewModel.ViewModelFactory;
 
 import javax.inject.Inject;
 
-public class MainActivity extends AppCompatActivity implements
-        SharedPreferences.OnSharedPreferenceChangeListener {
+public class MainActivity extends AppCompatActivity {
     private static final String TAG = MainActivity.class.getSimpleName();
 
     // Used in checking for runtime permissions.
@@ -81,8 +80,9 @@ public class MainActivity extends AppCompatActivity implements
     protected void onCreate(Bundle savedInstanceState) {
         ((MyApp) getApplicationContext()).getAppComponent().inject(this);
         super.onCreate(savedInstanceState);
-        getSupportActionBar().setDisplayShowTitleEnabled(false);
+        initActionBar();
         viewModel = ViewModelProviders.of(this, viewModelFactory).get(PhotoFlowViewModel.class);
+        //TODO remove
         myReceiver = new MyReceiver();
         setContentView(R.layout.activity_main);
         new ActivityUtil().addFragmentToActivity(
@@ -99,6 +99,13 @@ public class MainActivity extends AppCompatActivity implements
         }
     }
 
+    private void initActionBar() {
+        ActionBar actionBar = getSupportActionBar();
+        if (actionBar != null) {
+            actionBar.setDisplayShowTitleEnabled(false);
+        }
+    }
+
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.pic_flow_menu, menu);
@@ -111,8 +118,18 @@ public class MainActivity extends AppCompatActivity implements
     public boolean onPrepareOptionsMenu(Menu menu) {
         super.onPrepareOptionsMenu(menu);
         // Restore the state of the buttons when the activity (re)launches.
+        subscribeUi();
         setButtonsState(viewModel.requestingLocationUpdates());
         return true;
+    }
+
+    private void subscribeUi() {
+        viewModel.locationRequestState().observe(this, new Observer<Boolean>() {
+            @Override
+            public void onChanged(Boolean state) {
+                setButtonsState(state);
+            }
+        });
     }
 
     @Override
@@ -133,8 +150,6 @@ public class MainActivity extends AppCompatActivity implements
     @Override
     protected void onStart() {
         super.onStart();
-        PreferenceManager.getDefaultSharedPreferences(this)
-                .registerOnSharedPreferenceChangeListener(this);
         // Bind to the service. If the service is in foreground mode, this signals to the service
         // that since this activity is in the foreground, the service can exit foreground mode.
         bindService(new Intent(this, LocationUpdatesService.class), mServiceConnection,
@@ -153,8 +168,6 @@ public class MainActivity extends AppCompatActivity implements
             unbindService(mServiceConnection);
             mBound = false;
         }
-        PreferenceManager.getDefaultSharedPreferences(this)
-                .unregisterOnSharedPreferenceChangeListener(this);
         super.onStop();
     }
 
@@ -252,15 +265,6 @@ public class MainActivity extends AppCompatActivity implements
                 Toast.makeText(MainActivity.this, LocationUtilKt.getLocationText(location),
                         Toast.LENGTH_SHORT).show();
             }
-        }
-    }
-
-    @Override
-    public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String s) {
-        // Update the buttons state depending on whether location updates are being requested.
-        if (s.equals(LocationUtilKt.KEY_REQUESTING_LOCATION_UPDATES)) {
-            setButtonsState(sharedPreferences.getBoolean(LocationUtilKt.KEY_REQUESTING_LOCATION_UPDATES,
-                    false));
         }
     }
 

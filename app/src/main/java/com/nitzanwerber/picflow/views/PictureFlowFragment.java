@@ -1,7 +1,6 @@
 package com.nitzanwerber.picflow.views;
 
 import android.content.Context;
-import android.location.Location;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -15,15 +14,17 @@ import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-import com.nitzanwerber.picflow.*;
-import com.nitzanwerber.picflow.dataModel.dto.FlickerPrePhoto;
+import com.nitzanwerber.picflow.MyApp;
+import com.nitzanwerber.picflow.R;
 import com.nitzanwerber.picflow.dataModel.dto.FlickrPhotosSearchResponse;
+import com.nitzanwerber.picflow.dataModel.dto.FlickrPrePhoto;
 import com.nitzanwerber.picflow.viewModel.PhotoFlowViewModel;
 import com.nitzanwerber.picflow.viewModel.ViewModelFactory;
 import com.squareup.picasso.Picasso;
 
 import javax.inject.Inject;
 import java.util.ArrayList;
+import java.util.List;
 
 
 public class PictureFlowFragment extends Fragment {
@@ -62,6 +63,12 @@ public class PictureFlowFragment extends Fragment {
     }
 
     private void subscribeUi(final PhotoAdapter viewAdapter) {
+        viewModel.getAllPhotosHistory().observe(this.getActivity(), new Observer<List<FlickrPrePhoto>>() {
+            @Override
+            public void onChanged(List<FlickrPrePhoto> flickrPrePhotos) {
+                viewAdapter.setDataset(flickrPrePhotos);
+            }
+        });
         viewModel.getPhotoResponse().observe(this.getActivity(), new Observer<FlickrPhotosSearchResponse>() {
             @Override
             public void onChanged(FlickrPhotosSearchResponse response) {
@@ -78,10 +85,10 @@ public class PictureFlowFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
 
         LinearLayoutManager viewManager = new LinearLayoutManager(view.getContext());
-        viewAdapter = new PhotoAdapter(new ArrayList<FlickerPrePhoto>(), picasso);
-        if(savedInstanceState != null) {
-            ArrayList<FlickerPrePhoto> items = savedInstanceState.getParcelableArrayList("viewAdapter");
-            viewAdapter.setDataset(items); // Load saved data if any.
+        viewAdapter = new PhotoAdapter(new ArrayList<FlickrPrePhoto>(), picasso);
+        if (savedInstanceState != null) {
+            ArrayList<FlickrPrePhoto> items = savedInstanceState.getParcelableArrayList("viewAdapter");
+            viewAdapter.setDataset(items);// Load saved data if any.
         }
         recycleView = view.findViewById(R.id.location_list_view);
         recycleView.setLayoutManager(viewManager);

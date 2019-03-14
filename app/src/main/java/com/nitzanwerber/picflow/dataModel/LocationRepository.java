@@ -3,23 +3,26 @@ package com.nitzanwerber.picflow.dataModel;
 import android.content.SharedPreferences;
 import android.location.Location;
 import androidx.lifecycle.MutableLiveData;
+import com.nitzanwerber.picflow.liveData.SharedPreferenceBooleanLiveData;
 import com.nitzanwerber.picflow.utils.LocationUtilKt;
 
 import javax.inject.Inject;
 import javax.inject.Singleton;
 
 import static com.nitzanwerber.picflow.utils.LocationUtilKt.KEY_REQUESTING_LOCATION_UPDATES;
-import static com.nitzanwerber.picflow.utils.LocationUtilKt.LAST_KNOWN_LOCATION;
 
 @Singleton
 public class LocationRepository {
 
     private SharedPreferences sharedPreferences;
     private MutableLiveData<Location> currentLocation;
+    private SharedPreferenceBooleanLiveData sharedPreferenceLiveData;
 
     @Inject
     public LocationRepository(SharedPreferences sharedPreferences) {
         this.sharedPreferences = sharedPreferences;
+        this.sharedPreferenceLiveData = new SharedPreferenceBooleanLiveData(sharedPreferences,
+                KEY_REQUESTING_LOCATION_UPDATES,false);
     }
 
     public MutableLiveData<Location> getLocation() {
@@ -39,7 +42,7 @@ public class LocationRepository {
     /**
      * Returns true if requesting location updates, otherwise returns false.
      */
-    public boolean requestingLocationUpdates() {
+    public boolean isRequestingLocationUpdates() {
         return sharedPreferences
                 .getBoolean(KEY_REQUESTING_LOCATION_UPDATES, false);
     }
@@ -56,28 +59,7 @@ public class LocationRepository {
                 .apply();
     }
 
-
-    public void saveLastKnownLocation(Location location) {
-        sharedPreferences
-                .edit()
-                .putString(LAST_KNOWN_LOCATION,
-                        String.valueOf(location.getLatitude()) + "," +
-                                String.valueOf(location.getLongitude()))
-                .apply();
+    public SharedPreferenceBooleanLiveData locationRequestState() {
+        return sharedPreferenceLiveData;
     }
-
-    public Location getLastKnownLocation() {
-        String locationString = sharedPreferences
-                .getString(LAST_KNOWN_LOCATION, "");
-        Location location = new Location("Last_known_location");
-        if (!locationString.isEmpty()) {
-            String[] latLon = locationString.split(",");
-
-            location.setLatitude(Double.valueOf(latLon[0]));
-            location.setLongitude(Double.valueOf(latLon[1]));
-            return location;
-        }
-        return location;
-    }
-
 }

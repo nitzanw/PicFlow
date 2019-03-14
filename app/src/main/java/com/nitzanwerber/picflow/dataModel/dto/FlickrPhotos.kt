@@ -9,4 +9,4 @@ data class FlickerPhotos(
     var pages: String = "",
     var perpage: Int = 0,
     var total: String = "",
-    var photo: MutableList<FlickerPrePhoto> = mutableListOf())
+    var photo: MutableList<FlickrPrePhoto> = mutableListOf())

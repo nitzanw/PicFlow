@@ -15,7 +15,7 @@ public class PicassoModule {
 
     @Provides
     @Singleton
-    Picasso getPicasso(Context context, OkHttp3Downloader okHttp3Downloader) {
+    Picasso providePicasso(Context context, OkHttp3Downloader okHttp3Downloader) {
         return new Picasso.Builder(context)
                 .downloader(okHttp3Downloader)
                 .build();
@@ -23,7 +23,7 @@ public class PicassoModule {
 
     @Provides
     @Singleton
-    OkHttp3Downloader getOkHttp3Downloader(OkHttpClient okHttpClient) {
+    OkHttp3Downloader provideOkHttp3Downloader(OkHttpClient okHttpClient) {
         return new OkHttp3Downloader(okHttpClient);
     }
 }

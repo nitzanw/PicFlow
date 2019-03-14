@@ -8,9 +8,12 @@ import androidx.lifecycle.ViewModel;
 import com.nitzanwerber.picflow.dataModel.LocationRepository;
 import com.nitzanwerber.picflow.dataModel.PhotoRepository;
 import com.nitzanwerber.picflow.dataModel.dto.FlickrPhotosSearchResponse;
+import com.nitzanwerber.picflow.dataModel.dto.FlickrPrePhoto;
+import com.nitzanwerber.picflow.liveData.SharedPreferenceBooleanLiveData;
 
 import javax.inject.Inject;
 import javax.inject.Singleton;
+import java.util.List;
 
 @Singleton
 public class PhotoFlowViewModel extends ViewModel {
@@ -31,6 +34,7 @@ public class PhotoFlowViewModel extends ViewModel {
             return;
         }
 
+
         photoResponse = Transformations.switchMap(locationRepository.getLocation(), new Function<Location, LiveData<FlickrPhotosSearchResponse>>() {
             @Override
             public LiveData<FlickrPhotosSearchResponse> apply(Location location) {
@@ -45,6 +49,14 @@ public class PhotoFlowViewModel extends ViewModel {
     }
 
     public boolean requestingLocationUpdates() {
-        return locationRepository.requestingLocationUpdates();
+        return locationRepository.isRequestingLocationUpdates();
+    }
+
+    public LiveData<List<FlickrPrePhoto>> getAllPhotosHistory() {
+        return photoRepository.loadAllPhotosFromDB();
+    }
+
+    public SharedPreferenceBooleanLiveData locationRequestState() {
+        return locationRepository.locationRequestState();
     }
 }

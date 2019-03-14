@@ -7,6 +7,8 @@ import com.nitzanwerber.picflow.dataModel.LocationRepository;
 import com.nitzanwerber.picflow.utils.LocationUtilKt;
 
 import javax.inject.Inject;
+import java.util.LinkedList;
+import java.util.ListIterator;
 
 public class LocationTrackingViewModel extends ViewModel {
 
@@ -21,8 +23,8 @@ public class LocationTrackingViewModel extends ViewModel {
         locationRepository.setLocation(location);
     }
 
-    public boolean requestingLocationUpdates() {
-        return locationRepository.requestingLocationUpdates();
+    public boolean isRequestingLocationUpdates() {
+        return locationRepository.isRequestingLocationUpdates();
     }
 
     public void setRequestingLocationUpdates(boolean b) {
@@ -37,8 +39,11 @@ public class LocationTrackingViewModel extends ViewModel {
         return LocationUtilKt.getLocationTitle(context);
     }
 
-    public void saveLastKnownLocation(Location location) {
-        locationRepository.saveLastKnownLocation(location);
+    public void setLocationQueue(LinkedList<Location> locationsQueue) {
+        ListIterator<Location> listIterator = locationsQueue.listIterator();
+        while (listIterator.hasNext()) {
+            Location curr = listIterator.next();
+            setLocation(curr);
+        }
     }
-
 }

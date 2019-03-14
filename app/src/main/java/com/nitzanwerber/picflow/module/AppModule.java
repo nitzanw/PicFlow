@@ -6,6 +6,8 @@ import dagger.Module;
 import dagger.Provides;
 
 import javax.inject.Singleton;
+import java.util.concurrent.Executor;
+import java.util.concurrent.Executors;
 
 @Module
 public class AppModule {
@@ -29,5 +31,7 @@ public class AppModule {
     Context providesContext() {
         return context;
     }
+
+
 
 }
