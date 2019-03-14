@@ -2,14 +2,14 @@ package com.nitzanwerber.picflow;
 
 import android.app.Application;
 import android.content.SharedPreferences;
-import com.nitzanwerber.picflow.dataModel.LocationRepository;
+import com.nitzanwerber.picflow.repository.LocationRepository;
 import com.nitzanwerber.picflow.db.FlickrPrePhotoDatabase;
 import com.nitzanwerber.picflow.db.dao.FlickrPrePhotoDao;
 import com.nitzanwerber.picflow.module.*;
 import com.nitzanwerber.picflow.viewModel.LocationTrackingViewModel;
 import com.nitzanwerber.picflow.views.MainActivity;
 import com.nitzanwerber.picflow.views.PictureFlowFragment;
-import com.nitzanwerber.picflow.dataModel.PhotoRepository;
+import com.nitzanwerber.picflow.repository.PhotoRepository;
 import com.squareup.picasso.Picasso;
 import dagger.Component;
 import okhttp3.OkHttpClient;

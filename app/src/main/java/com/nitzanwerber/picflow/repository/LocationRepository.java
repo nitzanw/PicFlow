@@ -1,4 +1,4 @@
-package com.nitzanwerber.picflow.dataModel;
+package com.nitzanwerber.picflow.repository;
 
 import android.content.SharedPreferences;
 import android.location.Location;
@@ -34,7 +34,8 @@ public class LocationRepository {
     }
 
     public void setLocation(Location newLocation) {
-        if(true || LocationUtilKt.locationShouldUpdate(currentLocation,newLocation)){
+        //check if it has been ~100 meter since last location
+        if(LocationUtilKt.locationShouldUpdate(currentLocation,newLocation)){
             currentLocation.setValue(newLocation);
         }
     }

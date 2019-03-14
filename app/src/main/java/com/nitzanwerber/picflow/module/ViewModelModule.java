@@ -1,8 +1,8 @@
 package com.nitzanwerber.picflow.module;
 
 import androidx.lifecycle.ViewModel;
-import com.nitzanwerber.picflow.dataModel.LocationRepository;
-import com.nitzanwerber.picflow.dataModel.PhotoRepository;
+import com.nitzanwerber.picflow.repository.LocationRepository;
+import com.nitzanwerber.picflow.repository.PhotoRepository;
 import com.nitzanwerber.picflow.viewModel.PhotoFlowViewModel;
 import com.nitzanwerber.picflow.viewModel.ViewModelFactory;
 import dagger.MapKey;
@@ -17,7 +17,6 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 import java.util.Map;
-import java.util.concurrent.Executor;
 
 //*This class enables the reuse of the same viewModel in different fragments
 @Module

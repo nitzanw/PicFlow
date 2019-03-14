@@ -3,7 +3,7 @@ package com.nitzanwerber.picflow.viewModel;
 import android.content.Context;
 import android.location.Location;
 import androidx.lifecycle.ViewModel;
-import com.nitzanwerber.picflow.dataModel.LocationRepository;
+import com.nitzanwerber.picflow.repository.LocationRepository;
 import com.nitzanwerber.picflow.utils.LocationUtilKt;
 
 import javax.inject.Inject;
