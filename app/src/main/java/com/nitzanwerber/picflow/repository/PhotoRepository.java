@@ -3,7 +3,7 @@ package com.nitzanwerber.picflow.repository;
 import android.util.Log;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
-import com.nitzanwerber.picflow.FlickerService;
+import com.nitzanwerber.picflow.retrofit.FlickerService;
 import com.nitzanwerber.picflow.dataModel.dto.FlickrPhotosSearchResponse;
 import com.nitzanwerber.picflow.dataModel.dto.FlickrPrePhoto;
 import com.nitzanwerber.picflow.db.dao.FlickrPrePhotoDao;
@@ -44,9 +44,9 @@ public class PhotoRepository {
             @Override
             public void run() {
 
-
+                //for simplicity reason we only get one picture per page
                 flickerService.getPhotos(FlickerService.API_KEY, FlickerService.METHOD_FLICKR_SEARCH, lat, lon,
-                        1, "1", "json", "url_l").enqueue(new Callback<FlickrPhotosSearchResponse>() {
+                        1, 1, "1", "json", "url_l").enqueue(new Callback<FlickrPhotosSearchResponse>() {
                     @Override
                     public void onResponse(@NotNull Call<FlickrPhotosSearchResponse> call, @NotNull Response<FlickrPhotosSearchResponse> response) {
                         //insert to db

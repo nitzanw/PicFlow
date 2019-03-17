@@ -10,6 +10,7 @@ import android.util.Log;
 import androidx.annotation.NonNull;
 import androidx.core.app.NotificationCompat;
 import androidx.core.content.ContextCompat;
+import androidx.lifecycle.LifecycleService;
 import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 import com.google.android.gms.location.*;
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -21,7 +22,7 @@ import com.nitzanwerber.picflow.viewModel.LocationTrackingViewModel;
 import java.util.LinkedList;
 
 
-public class LocationUpdatesService extends Service {
+public class LocationUpdatesService extends LifecycleService {
 
     private static final String PACKAGE_NAME =
             "com.nitzanwerber.picflow.views.LocationUpdatesService";
@@ -44,7 +45,7 @@ public class LocationUpdatesService extends Service {
     /**
      * The desired interval for location updates. Inexact. Updates may be more or less frequent.
      */
-    private static final long UPDATE_INTERVAL_IN_MILLISECONDS = 2 * 10000;
+    private static final long UPDATE_INTERVAL_IN_MILLISECONDS = 5 * 10000;
 
 
     /**
@@ -101,6 +102,7 @@ public class LocationUpdatesService extends Service {
 
     @Override
     public void onCreate() {
+        super.onCreate();
         viewModel = new LocationTrackingViewModel();
         ((MyApp) this.getApplicationContext()).getAppComponent().inject(viewModel);
         mFusedLocationClient = LocationServices.getFusedLocationProviderClient(this);
@@ -135,6 +137,7 @@ public class LocationUpdatesService extends Service {
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
+        super.onStartCommand(intent, flags, startId);
         Log.i(TAG, "Service started");
         boolean startedFromNotification = intent.getBooleanExtra(EXTRA_STARTED_FROM_NOTIFICATION,
                 false);
@@ -159,6 +162,7 @@ public class LocationUpdatesService extends Service {
         // Called when a client (MainActivity) comes to the foreground
         // and binds with this service. The service should cease to be a foreground service
         // when that happens.
+        super.onBind(intent);
         Log.i(TAG, "in onBind()");
         stopForeground(true);
         mChangingConfiguration = false;
@@ -201,6 +205,7 @@ public class LocationUpdatesService extends Service {
 
     @Override
     public void onDestroy() {
+        super.onDestroy();
         mServiceHandler.removeCallbacksAndMessages(null);
     }
 

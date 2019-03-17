@@ -1,4 +1,4 @@
-package com.nitzanwerber.picflow;
+package com.nitzanwerber.picflow.retrofit;
 
 import com.nitzanwerber.picflow.dataModel.dto.FlickrPhotosSearchResponse;
 import dagger.Module;
@@ -20,7 +20,7 @@ public interface FlickerService {
     @Headers("Content-Type: application/json")
     Call<FlickrPhotosSearchResponse> getPhotos(@Query("api_key") String api_key, @Query("method") String method,
                                                @Query("lat") String lat, @Query("lon") String lon,
-                                               @Query("nojsoncallback") int textnojsoncallback,
+                                               @Query("nojsoncallback") int textnojsoncallback, @Query("radius") double radius,
                                                @Query("per_page") String perPage, @Query("format") String format,
                                                @Query("extras") String extras);
 }

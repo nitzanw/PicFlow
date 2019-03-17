@@ -35,7 +35,7 @@ public class LocationRepository {
 
     public void setLocation(Location newLocation) {
         //check if it has been ~100 meter since last location
-        if(LocationUtilKt.locationShouldUpdate(currentLocation,newLocation)){
+        if(true ){//|| isRequestingLocationUpdates() && LocationUtilKt.locationShouldUpdate(currentLocation,newLocation)){
             currentLocation.setValue(newLocation);
         }
     }

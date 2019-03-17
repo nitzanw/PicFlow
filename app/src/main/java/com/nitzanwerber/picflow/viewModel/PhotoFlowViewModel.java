@@ -3,6 +3,7 @@ package com.nitzanwerber.picflow.viewModel;
 import android.location.Location;
 import androidx.arch.core.util.Function;
 import androidx.lifecycle.LiveData;
+import androidx.lifecycle.MediatorLiveData;
 import androidx.lifecycle.Transformations;
 import androidx.lifecycle.ViewModel;
 import com.nitzanwerber.picflow.repository.LocationRepository;
@@ -33,7 +34,6 @@ public class PhotoFlowViewModel extends ViewModel {
         if (this.photoResponse != null) {
             return;
         }
-
 
         photoResponse = Transformations.switchMap(locationRepository.getLocation(), new Function<Location, LiveData<FlickrPhotosSearchResponse>>() {
             @Override

@@ -1,16 +1,15 @@
 package com.nitzanwerber.picflow.views
 
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import androidx.recyclerview.widget.RecyclerView
 import com.nitzanwerber.picflow.R
-import com.nitzanwerber.picflow.dataModel.dto.FlickrPrePhoto
 import com.nitzanwerber.picflow.dataModel.dto.FlickrPhotosSearchResponse
+import com.nitzanwerber.picflow.dataModel.dto.FlickrPrePhoto
 import com.squareup.picasso.Picasso
-import java.util.ArrayList
+import java.util.*
 
 
 class PhotoAdapter(

@@ -6,7 +6,7 @@ import android.preference.PreferenceManager;
 import com.google.gson.FieldNamingPolicy;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
-import com.nitzanwerber.picflow.FlickerService;
+import com.nitzanwerber.picflow.retrofit.FlickerService;
 import dagger.Module;
 import dagger.Provides;
 import okhttp3.OkHttpClient;

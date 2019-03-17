@@ -2,6 +2,7 @@ package com.nitzanwerber.picflow;
 
 import android.app.Application;
 import com.nitzanwerber.picflow.module.*;
+import com.nitzanwerber.picflow.retrofit.FlickerService;
 
 public class MyApp extends Application {
     private AppComponent mAppComponent;
