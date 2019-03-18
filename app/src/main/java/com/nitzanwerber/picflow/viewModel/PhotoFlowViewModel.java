@@ -3,14 +3,13 @@ package com.nitzanwerber.picflow.viewModel;
 import android.location.Location;
 import androidx.arch.core.util.Function;
 import androidx.lifecycle.LiveData;
-import androidx.lifecycle.MediatorLiveData;
 import androidx.lifecycle.Transformations;
 import androidx.lifecycle.ViewModel;
-import com.nitzanwerber.picflow.repository.LocationRepository;
-import com.nitzanwerber.picflow.repository.PhotoRepository;
 import com.nitzanwerber.picflow.dataModel.dto.FlickrPhotosSearchResponse;
 import com.nitzanwerber.picflow.dataModel.dto.FlickrPrePhoto;
 import com.nitzanwerber.picflow.liveData.SharedPreferenceBooleanLiveData;
+import com.nitzanwerber.picflow.repository.LocationRepository;
+import com.nitzanwerber.picflow.repository.PhotoRepository;
 
 import javax.inject.Inject;
 import javax.inject.Singleton;

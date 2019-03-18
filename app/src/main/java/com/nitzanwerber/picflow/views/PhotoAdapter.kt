@@ -49,6 +49,7 @@ class PhotoAdapter(
     }
 
     fun updateData(data: FlickrPhotosSearchResponse) {
+        //for simplicity reasons
         myDataset.add(0,data.photos.photo[0])
         this.notifyDataSetChanged();
     }

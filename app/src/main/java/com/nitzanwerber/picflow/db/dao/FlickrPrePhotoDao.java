@@ -15,7 +15,11 @@ import static androidx.room.OnConflictStrategy.IGNORE;
 public interface FlickrPrePhotoDao {
     @Insert(onConflict = IGNORE)
     void save(FlickrPrePhoto prePhoto);
+
     //Load all photos
     @Query("SELECT * FROM flickrprephoto ORDER BY insertDate DESC")
     LiveData<List<FlickrPrePhoto>> loadAll();
+
+    @Query("SELECT id FROM flickrprephoto WHERE id = :id LIMIT 1")
+    String getPhotoId(String id);
 }
