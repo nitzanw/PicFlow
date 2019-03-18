@@ -46,7 +46,7 @@ public class PhotoRepository {
 
                 //for simplicity reason we only get one picture per page
                 flickerService.getPhotos(FlickerService.API_KEY, FlickerService.METHOD_FLICKR_SEARCH, lat, lon,
-                        1, 1, "1", "json", "url_l").enqueue(new Callback<FlickrPhotosSearchResponse>() {
+                        1, 0.1, "1", "json", "url_l").enqueue(new Callback<FlickrPhotosSearchResponse>() {
                     @Override
                     public void onResponse(@NotNull Call<FlickrPhotosSearchResponse> call, @NotNull Response<FlickrPhotosSearchResponse> response) {
                         //insert to db
